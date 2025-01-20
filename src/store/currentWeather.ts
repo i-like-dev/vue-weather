@@ -1,11 +1,30 @@
 import { defineStore } from 'pinia';
 import type { CurrentChartData, CurrentElements } from '@/types';
 import axios from 'axios';
+import { format } from 'date-fns';
+
+// 工具函數：簡化日期與時間
+const simplifyDateTime = (dateTime: string) => ({
+  time: dateTime.split('T')[1].slice(0, 2),
+  date: dateTime.split('T')[0].split('-').slice(1).join('/'),
+});
+
+// 工具函數：過濾日期陣列
+const filterForecastDates = (dateArr: string[][]) => {
+  return dateArr.reduce((result: string[][], date: string[], index: number) => {
+    if (index === 0 || date[0] === '00') {
+      result.push(date); // 保留完整陣列
+    } else {
+      result.push([date[0]]); // 僅保留時間部分
+    }
+    return result;
+  }, []);
+};
 
 export const useCurrentWeather = defineStore('currentWeather', {
   state: () => ({
-    currentData: {} as CurrentElements,
-    currentChartData: {} as CurrentChartData, // 逐三小時折線圖數據 3-hour Chart data
+    currentData: {} as CurrentElements, // 即時天氣預報面板
+    currentChartData: {} as CurrentChartData, // 72小時預報折線圖數據 72 hour Chart data
   }),
   actions: {
     async fetchWeather(city: string, region: string, dataId: string[]) {
@@ -19,68 +38,49 @@ export const useCurrentWeather = defineStore('currentWeather', {
               LocationName: region,
               ElementName:
                 '溫度,相對濕度,體感溫度,舒適度指數,風速,3小時降雨機率,天氣現象',
+              timeFrom: format(new Date(), "yyyy-MM-dd'T'HH:00:00"),
             },
           }
         );
 
-        // 由API獲取的指定天氣因子資料存進 dataNow
-        const dataNow =
+        // 由API獲取的指定天氣因子資料存進 weatherElements
+        const weatherElements =
           response.data.records.Locations[0].Location[0].WeatherElement;
 
-        if (dataNow) {
+        if (weatherElements) {
           // 通用函數，用來提取即時天氣元素數值
           const extractData = (source: any, index: number, key: string) => {
-            return source[index].Time[1].ElementValue[0][key];
+            return source[index].Time[0].ElementValue[0][key];
           };
 
-          const t = extractData(dataNow, 0, 'Temperature'); // 溫度
-          const rh = extractData(dataNow, 1, 'RelativeHumidity'); // 相對濕度
-          const ci = extractData(dataNow, 3, 'ComfortIndexDescription'); // 舒適度指數, 舒適度文字描述
-          const ws = extractData(dataNow, 4, 'WindSpeed'); // 風速 (公尺/秒)
-          const pop3h = extractData(dataNow, 5, 'ProbabilityOfPrecipitation'); // 3小時降雨機率
-          const wx = extractData(dataNow, 6, 'Weather'); // 天氣現象
-
-          // 將資料存進 currentData 物件
           this.currentData = {
             cityName: city,
             regionName: region,
-            pop: pop3h,
-            temp: t,
-            rh: rh,
-            wx: wx,
-            ci: ci,
-            ws: ws,
+            pop: extractData(weatherElements, 5, 'ProbabilityOfPrecipitation'), // 3小時降雨機率
+            temp: extractData(weatherElements, 0, 'Temperature'), //溫度
+            rh: extractData(weatherElements, 1, 'RelativeHumidity'), // 相對濕度
+            wx: extractData(weatherElements, 6, 'Weather'), // 天氣現象
+            ci: extractData(weatherElements, 3, 'ComfortIndexDescription'), // 舒適度指數, 舒適度文字描述
+            ws: extractData(weatherElements, 4, 'WindSpeed'), // 風速 (公尺/秒)
           };
 
-          // 折線圖-溫度、體感溫度各25筆資料集 (更新為逐1小時資料?)
-          const TCollection = dataNow[0].Time.slice(0, 25);
-          const ATCollection = dataNow[2].Time.slice(0, 25);
-
-          // 通用函數，用來簡化日期、簡化時間
-          const getDate = (str: string) =>
-            str.split('T')[0].split('-').slice(1).join('/');
-          const getTime = (str: string) => str.split('T')[1].slice(0, 2);
-
-          // 逐3小時的日期時間陣列 (更新為逐1小時資料?)
-          const dateArr = TCollection.map((el: any, i: number) => {
-            // 陣列中每逢8倍數索引值的陣列中加入時間、日期兩個字串，其餘僅時間字串
-            return i % 8 === 0
-              ? [getTime(el.DataTime), getDate(el.DataTime)]
-              : [getTime(el.DataTime)];
-          });
-
-          const tArr = TCollection.map(
-            (el: any) => el.ElementValue[0].Temperature
-          );
-          const atArr = ATCollection.map(
-            (el: any) => el.ElementValue[0].ApparentTemperature
+          // 72小時預報折線圖數據 (前36小時區間，由原逐3小時預報調整為逐時預報)
+          // 即時取得資料集:溫度、體感溫度各48筆
+          // 從溫度資料集提取簡化的日期時間
+          const tempForecasts = weatherElements[0].Time.slice(0, 47);
+          const apparentTempForecasts = weatherElements[2].Time.slice(0, 47);
+          const shortenedDateArr = tempForecasts.map((el: any) =>
+            Object.values(simplifyDateTime(el.DataTime))
           );
 
-          // 將資料存進 currentChartData 物件
           this.currentChartData = {
-            date: dateArr,
-            temp: tArr,
-            at: atArr,
+            date: filterForecastDates(shortenedDateArr),
+            temp: tempForecasts.map(
+              (el: any) => el.ElementValue[0].Temperature
+            ),
+            apparentTemp: apparentTempForecasts.map(
+              (el: any) => el.ElementValue[0].ApparentTemperature
+            ),
           };
         }
       } catch (error) {

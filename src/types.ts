@@ -20,7 +20,7 @@ export interface CurrentElements {
 export interface CurrentChartData {
   date: string[][];
   temp: number[]; // 溫度
-  at: number[]; // 體感溫度
+  apparentTemp: number[]; // 體感溫度
 }
 
 // 一週天氣預報元素，每個天氣元素皆有白天(06:00~18:00)、晚上(18:00~隔天06:00)2筆資料
