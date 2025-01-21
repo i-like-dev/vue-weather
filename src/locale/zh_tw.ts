@@ -14,9 +14,9 @@ export default {
   // Chart buttons
   showChart: '查看折線圖',
   hideChart: '收起折線圖',
-  every3hourForecasts: '逐三小時預報',
-  every3hourForecastsTitle: '逐三小時溫度曲線',
-  sevenDayTempChart: '一週溫度',
+  _72hourForecasts: '72小時預報',
+  _72hourForecastsTitle: '72小時溫度曲線',
+  sevenDayTempChart: '一週溫度曲線',
   sevenDayTempChartTitle: '一週溫度曲線',
   // Chart label
   dayTemp: '白天溫度',

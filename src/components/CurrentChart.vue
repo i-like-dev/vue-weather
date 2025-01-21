@@ -4,7 +4,7 @@
     :options="chartOptions"
     :data="chartData"
     aria-label="Current Weather Line Chart"
-    width="1000"
+    width="1500"
   />
 </template>
 
@@ -45,7 +45,7 @@ const chartData = computed(() => ({
     },
     {
       label: t('apparentTemp'),
-      data: currentChartData.value.at,
+      data: currentChartData.value.apparentTemp,
       backgroundColor: '#fb923c',
       borderColor: '#fb923c',
       hoverRadius: 6,

@@ -14,8 +14,8 @@ export default {
   // Chart buttons
   showChart: 'Show Chart',
   hideChart: 'Hide Chart',
-  every3hourForecasts: 'Every 3-hour Forecasts',
-  every3hourForecastsTitle: '3-hour Temprature Chart',
+  _72hourForecasts: '72 Hour Forecasts',
+  _72hourForecastsTitle: '72 Hour Temprature Chart',
   sevenDayTempChart: '7 Day Temperature Chart',
   sevenDayTempChartTitle: '7 Day Temperature Chart',
   // Chart label

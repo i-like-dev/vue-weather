@@ -14,11 +14,11 @@
     </button>
     <div v-if="chartDisplayActive" class="flex gap-3 items-center">
       <button
-        :title="$t('every3hourForecastsTitle')"
+        :title="$t('_72hourForecastsTitle')"
         @click="setSelectedChart('current')"
         :class="buttonClass('current')"
       >
-        {{ $t('every3hourForecasts') }}
+        {{ $t('_72hourForecasts') }}
       </button>
       <span class="opacity-40">|</span>
       <button
@@ -32,7 +32,7 @@
   </div>
   <div class="rounded-lg overflow-hidden bg-black/20 text-white">
     <div v-if="chartDisplayActive" class="flex p-3 md:p-7 overflow-auto">
-      <component :is="selectedChartComponent" height="240"></component>
+      <component :is="selectedChartComponent" height="300"></component>
     </div>
   </div>
 </template>
