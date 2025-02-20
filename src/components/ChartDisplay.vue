@@ -2,7 +2,7 @@
   <div class="flex p-2 justify-between align-middle text-sm text-sky-200">
     <button
       @click="toggleChartDisplay"
-      class="flex my-auto gap-2 justify-items-center text-center"
+      class="flex my-auto gap-2 justify-items-center text-center hover:text-sky-300 cursor-pointer"
     >
       <p :class="{ 'font-bold': !chartDisplayActive }">
         {{ $t(chartDisplayActive ? 'hideChart' : 'showChart') }}

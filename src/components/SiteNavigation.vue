@@ -1,6 +1,6 @@
 <template>
   <header
-    class="fixed top-0 z-10 w-full shadow-lg tracking-wide bg-weather-primary/60 backdrop-blur"
+    class="fixed top-0 z-10 w-full shadow-lg tracking-wide bg-weather-primary/60 backdrop-blur-sm"
   >
     <nav class="container flex flex-row items-center text-white py-3 px-4">
       <RouterLink :to="{ name: 'home' }">

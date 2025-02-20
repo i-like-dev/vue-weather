@@ -38,7 +38,7 @@
             </span>
           </div>
         </div>
-        <div class="h-20 border-l-4 rounded opacity-0 md:opacity-25"></div>
+        <div class="h-20 border-l-4 rounded-sm opacity-0 md:opacity-25"></div>
         <div class="flex flex-col text-left gap-1">
           <span>
             <p>{{ $t('humidity') }}：{{ currentData.rh }}%</p>

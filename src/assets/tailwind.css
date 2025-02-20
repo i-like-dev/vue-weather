@@ -1,6 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+
+  --color-weather-primary: #6d28d9;
+  --color-weather-secondary: #a78bfa;
+  --color-confirm-btn: #0369a1;
+  --color-confirm-btn-dark: #075985;
+}
+
+@utility container {
+  margin-inline: auto;
+}
 
 select {
   -webkit-appearance: none;
@@ -10,6 +25,7 @@ select {
   background-repeat: no-repeat;
   background-position: right 10% center;
   background-size: 12px;
+  background-color: white;
   padding: 6px 28px 6px 18px;
   cursor: pointer;
   line-height: 1.25;
