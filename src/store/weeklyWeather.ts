@@ -15,7 +15,7 @@ export const useWeeklyWeather = defineStore('weeklyWeather', {
           `https://opendata.cwa.gov.tw/api/v1/rest/datastore/${dataId[1]}?`,
           {
             params: {
-              Authorization: import.meta.env.VITE_API,
+              Authorization: import.meta.env.VITE_API_CWA,
               LocationName: region,
               ElementName: '平均溫度,平均相對濕度,12小時降雨機率,天氣現象',
             },

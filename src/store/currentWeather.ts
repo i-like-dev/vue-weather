@@ -34,7 +34,7 @@ export const useCurrentWeather = defineStore('currentWeather', {
           `https://opendata.cwa.gov.tw/api/v1/rest/datastore/${dataId[0]}?`,
           {
             params: {
-              Authorization: import.meta.env.VITE_API,
+              Authorization: import.meta.env.VITE_API_CWA,
               LocationName: region,
               ElementName:
                 '溫度,相對濕度,體感溫度,舒適度指數,風速,3小時降雨機率,天氣現象',

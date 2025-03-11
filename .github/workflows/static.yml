@@ -41,7 +41,7 @@ jobs:
       - name: Build
         run: pnpm build
         env:
-          VITE_API: ${{ secrets.VITE_API }}
+          VITE_API_CWA: ${{ secrets.VITE_API_CWA }}
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
