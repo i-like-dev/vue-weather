@@ -14,7 +14,7 @@
       <a href="https://github.com/periondev" title="github" target="_blank"
         >Peri🐚</a
       >
-      © 2024
+      © {{ new Date().getFullYear() }}
     </p>
     <span class="text-xs">
       Weather icons created by
